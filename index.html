@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smoke Shop Accessories | Dallas Wholesale</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: radial-gradient(circle at top left, #f0fdf4, #ffffff, #dcfce7); min-height: 100vh; }
+        .hidden { display: none; }
+        .loader { border-top-color: #059669; animation: spinner 1.5s linear infinite; }
+        @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div id="ageGate" class="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-6 text-center">
+        <div class="bg-white p-10 rounded-3xl max-w-sm border-b-8 border-green-600 shadow-2xl">
+            <h1 class="text-2xl font-black text-green-800 mb-2 underline tracking-tighter">SMOKE SHOP ACCESSORIES</h1>
+            <p class="mb-8 font-bold text-gray-500 uppercase">Age Verification Required</p>
+            <button onclick="enterSite()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-black text-xl hover:bg-black transition shadow-lg">I AM 21+</button>
+            <p class="mt-4 text-[10px] text-gray-400">11029 HARRY HINES BLVD, DALLAS, TX</p>
+        </div>
+    </div>
+
+    <div id="app" class="hidden">
+        <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-green-100 p-4">
+            <div class="container mx-auto flex flex-col lg:flex-row justify-between items-center gap-4">
+                <div class="text-left flex items-center gap-3">
+                    <div class="w-10 h-10 bg-green-700 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-md">S</div>
+                    <div>
+                        <h1 class="text-xl font-black text-green-900 leading-none uppercase italic">Smoke Shop Accessories</h1>
+                        <p class="text-[9px] font-bold text-gray-500 mt-1 uppercase">Dallas Wholesale Distribution</p>
+                    </div>
+                </div>
+
+                <input type="text" id="search" onkeyup="render()" placeholder="Search styles or products..." class="px-5 py-2 border-2 border-green-100 rounded-full w-full lg:w-1/3 outline-none focus:border-green-600 shadow-sm">
+                
+                <div class="flex gap-2">
+                    <input type="email" id="loginEmail" placeholder="Wholesale Email" class="px-3 py-2 border rounded-xl text-sm w-40 outline-none focus:ring-2 focus:ring-green-500">
+                    <button onclick="login()" class="bg-green-800 text-white px-5 py-2 rounded-xl text-xs font-bold hover:bg-black transition">LOGIN</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="container mx-auto px-4 py-10">
+            <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="col-span-full text-center py-20">
+                    <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mx-auto mb-4"></div>
+                    <p class="font-bold text-green-800">SYNCING WITH DALLAS INVENTORY...</p>
+                </div>
+            </div>
+        </main>
+
+        <section class="bg-white/60 border-y border-green-100 py-16 px-4">
+            <div class="container mx-auto max-w-xl text-center">
+                <h2 class="text-3xl font-black text-green-900 mb-2 uppercase">Create Wholesale Account</h2>
+                <p class="text-gray-600 mb-8 font-medium">Register your store to unlock bulk pricing.</p>
+                <div class="grid grid-cols-1 gap-4 text-left bg-white p-8 rounded-3xl shadow-xl border border-green-50">
+                    <input id="regName" placeholder="Full Name" class="p-4 border rounded-2xl outline-none focus:border-green-500">
+                    <input id="regStore" placeholder="Store Name" class="p-4 border rounded-2xl outline-none focus:border-green-500">
+                    <input id="regEmail" placeholder="Email Address" class="p-4 border rounded-2xl outline-none focus:border-green-500">
+                    <input id="regPhone" placeholder="Phone Number" class="p-4 border rounded-2xl outline-none focus:border-green-500">
+                    <input id="regTax" placeholder="Sales Tax ID" class="p-4 border rounded-2xl outline-none focus:border-green-500">
+                    <button onclick="submitLead()" class="bg-green-700 text-white py-4 rounded-2xl font-black text-lg hover:bg-black transition mt-4 shadow-lg shadow-green-200">SUBMIT FOR APPROVAL</button>
+                </div>
+            </div>
+        </section>
+
+        <footer class="bg-green-950 text-white py-12 px-4 text-center">
+            <p class="font-black text-lg mb-2 uppercase tracking-widest">Smoke Shop Accessories</p>
+            <p class="text-sm opacity-80">11029 HARRY HINES BLVD, SUITE #B105, DALLAS, TX, 75229</p>
+            <p class="text-sm opacity-80 mt-1">📞 (972)-331-5706 | ✉️ smokeshopaccessories@gmail.com</p>
+            <div class="mt-6 pt-6 border-t border-white/10 text-[10px] opacity-40 uppercase font-bold">Authorized Wholesale Distribution Only</div>
+        </footer>
+    </div>
+
+    <script>
+        let products = [];
+        let wholesale = [];
+        let activeUser = "";
+        // YOUR LIVE LINK INTEGRATED HERE
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZgQBFCBd7IrQGoXMFIuUlspWjE4zaKc5sq-EHh4eV9HewM_G_IKlX17kS-03ZxqWE/exec"; 
+
+        function enterSite() {
+            document.getElementById('ageGate').classList.add('hidden');
+            document.getElementById('app').classList.remove('hidden');
+            fetchData();
+        }
+
+        async function fetchData() {
+            try {
+                const res = await fetch(SCRIPT_URL);
+                const data = await res.json();
+                products = data.products;
+                wholesale = data.wholesale;
+                render();
+            } catch (e) { 
+                console.error(e);
+                alert("Inventory Sync Failed. Please check your Google Sheet tabs."); 
+            }
+        }
+
+        function login() {
+            activeUser = document.getElementById('loginEmail').value.toLowerCase().trim();
+            render();
+            if(activeUser) alert("Welcome! Wholesale pricing activated for: " + activeUser);
+        }
+
+        function render() {
+            const query = document.getElementById('search').value.toLowerCase();
+            const grid = document.getElementById('grid');
+            const filtered = products.filter(p => p[0].toLowerCase().includes(query) || p[1].toLowerCase().includes(query));
+
+            if(filtered.length === 0) {
+                grid.innerHTML = `<p class="col-span-full text-center py-20 text-gray-400">No products found matching your search.</p>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(p => {
+                let [name, style, retail, standardWholesale, img] = p;
+                let displayPrice;
+                let tag = "";
+
+                // Logic: 1. Individual Discount 2. Standard Wholesale 3. Retail
+                let individual = wholesale.find(w => w[0].toLowerCase() === activeUser && w[1] === name);
+                
+                if (activeUser && individual) {
+                    displayPrice = `<span class="text-green-700 font-black">$${individual[2]}</span>`;
+                    tag = `<span class="bg-blue-600 text-white text-[9px] px-2 py-0.5 rounded-full font-bold">VIP PRICE</span>`;
+                } else if (activeUser) {
+                    displayPrice = `<span class="text-green-700 font-black">$${standardWholesale}</span>`;
+                    tag = `<span class="bg-green-600 text-white text-[9px] px-2 py-0.5 rounded-full font-bold">WHOLESALE</span>`;
+                } else {
+                    displayPrice = `<span class="text-gray-900 font-black">$${retail}</span>`;
+                    tag = `<span class="bg-gray-100 text-gray-500 text-[9px] px-2 py-0.5 rounded-full font-bold uppercase">Retail</span>`;
+                }
+
+                // Automatic Image Logic
+                let displayImg = (img && img.trim() !== "") ? img : `https://source.unsplash.com/800x800/?${name},smoke,shop`;
+
+                return `
+                <div class="bg-white p-5 rounded-3xl border border-green-50 shadow-sm hover:shadow-2xl transition-all duration-300">
+                    <img src="${displayImg}" class="w-full h-48 object-cover rounded-2xl mb-4 shadow-inner" onerror="this.src='https://via.placeholder.com/400?text=Smoke+Shop'">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-[10px] font-black text-green-500 uppercase tracking-widest">${style}</span>
+                        ${tag}
+                    </div>
+                    <h3 class="font-bold text-gray-800 h-12 leading-tight">${name}</h3>
+                    <div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-50">
+                        <p class="text-xl">${displayPrice}</p>
+                        <button onclick="alert('Order request for ${name} sent to store.')" class="bg-green-600 text-white px-5 py-2 rounded-xl text-xs font-bold hover:bg-black transition shadow-md">ORDER</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        async function submitLead() {
+            const data = {
+                name: document.getElementById('regName').value,
+                store: document.getElementById('regStore').value,
+                email: document.getElementById('regEmail').value,
+                phone: document.getElementById('regPhone').value,
+                taxId: document.getElementById('regTax').value
+            };
+            if(!data.email || !data.taxId) return alert("Please provide Email and Tax ID");
+            
+            try {
+                await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(data) });
+                alert("Application Sent! We will approve your wholesale access shortly.");
+                document.querySelectorAll('input').forEach(i => i.value = '');
+            } catch (e) {
+                alert("Submission failed. Please check your internet.");
+            }
+        }
+    </script>
+</body>
+</html>
