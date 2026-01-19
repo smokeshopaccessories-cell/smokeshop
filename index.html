@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smoke Shop Accessories | Dallas Wholesale</title>
+    <title>Smoke Shop Accessories Wholesale</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background: #f9fafb; min-height: 100vh; font-family: sans-serif; }
@@ -150,9 +150,10 @@
             if(!cart.length) return; const btn = document.getElementById('orderBtn'); btn.disabled = true; btn.innerText = "SENDING...";
             try {
                 await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ type: "order", customerName: activeUser.name, email: activeUser.email, customerType: (activeUser.taxId ? "Wholesale" : "Retail"), items: cart }) });
-                alert("Order Placed! Dallas HQ will contact you."); cart = []; updateCartUI(); toggleCart();
+                alert("Order Placed! Smoke Shop Accessories will contact you."); cart = []; updateCartUI(); toggleCart();
             } catch (e) { alert("Failed to send order."); } finally { btn.disabled = false; btn.innerText = "Confirm & Send Order"; }
         }
     </script>
 </body>
 </html>
+
