@@ -25,7 +25,7 @@
 
     <div id="accessGate" class="hidden fixed inset-0 z-[90] bg-green-50 flex items-center justify-center p-4">
         <div class="bg-white p-8 rounded-3xl max-w-md w-full shadow-2xl border border-green-100">
-            <img src="logo.png" class="h-12 mx-auto mb-6">
+            <img src="logo.png" class="h-12 mx-auto mb-6" onerror="this.src='https://via.placeholder.com/200x80?text=LOGO'">
             <h2 class="text-2xl font-black text-center text-green-900 mb-6 uppercase">Customer Access</h2>
             
             <div id="loginForm">
@@ -42,7 +42,7 @@
                 <input id="regName" placeholder="Full Name *" class="w-full p-4 border rounded-2xl mb-3 outline-none">
                 <input id="regPhone" placeholder="Phone Number *" class="w-full p-4 border rounded-2xl mb-3 outline-none">
                 <input id="regEmail" placeholder="Email Address *" class="w-full p-4 border rounded-2xl mb-3 outline-none">
-                <input id="regTax" placeholder="Tax ID (Optional for Wholesale)" class="w-full p-4 border rounded-2xl mb-4 outline-none">
+                <input id="regTax" placeholder="Tax ID (Leave empty for Retail)" class="w-full p-4 border rounded-2xl mb-4 outline-none">
                 <button onclick="register()" class="w-full bg-black text-white py-4 rounded-2xl font-black hover:bg-green-700 transition">REGISTER & SHOP</button>
                 <button onclick="toggleAccess('login')" class="w-full text-xs text-gray-400 mt-4 underline uppercase">Back to Login</button>
             </div>
@@ -52,8 +52,8 @@
     <div id="app" class="hidden">
         <header class="bg-white/95 backdrop-blur-md sticky top-0 z-50 border-b border-green-100 p-4">
             <div class="container mx-auto flex justify-between items-center">
-                <div class="flex items-center gap-3">
-                    <img src="logo.png" alt="Logo" class="h-10 w-auto">
+                <div class="flex items-center gap-3 cursor-pointer" onclick="goHome()">
+                    <img src="logo.png" alt="Logo" class="h-10 w-auto" onerror="this.src='https://via.placeholder.com/40x40?text=S'">
                     <div class="hidden sm:block">
                         <h1 class="text-sm font-black text-green-900 uppercase italic leading-none">Smoke Shop Accessories</h1>
                         <p id="welcomeUser" class="text-[9px] font-bold text-green-600 mt-1 uppercase"></p>
@@ -61,7 +61,7 @@
                 </div>
                 
                 <div class="flex items-center gap-4">
-                    <input type="text" id="search" onkeyup="render()" placeholder="Search..." class="px-4 py-2 border rounded-full text-sm w-32 sm:w-64 outline-none focus:border-green-600">
+                    <input type="text" id="search" onkeyup="render()" placeholder="Search Products..." class="px-4 py-2 border rounded-full text-sm w-32 sm:w-64 outline-none focus:border-green-600">
                     <div class="relative cursor-pointer" onclick="toggleCart()">
                         <span class="text-2xl">🛒</span>
                         <span id="cartCount" class="cart-count">0</span>
@@ -75,7 +75,7 @@
             <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div class="col-span-full text-center py-20">
                     <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mx-auto mb-4"></div>
-                    <p class="font-bold text-green-800">LOADING DALLAS INVENTORY...</p>
+                    <p class="font-bold text-green-800" id="statusText">LOADING DALLAS INVENTORY...</p>
                 </div>
             </div>
         </main>
@@ -88,8 +88,7 @@
                 <button onclick="toggleCart()" class="text-3xl font-light">&times;</button>
             </div>
             
-            <div id="cartItems" class="flex-grow overflow-y-auto space-y-4">
-                </div>
+            <div id="cartItems" class="flex-grow overflow-y-auto space-y-4"></div>
 
             <div class="border-t pt-6 mt-6">
                 <div class="flex justify-between text-xl font-black mb-6">
@@ -108,7 +107,6 @@
         let cart = [];
         let activeUser = JSON.parse(localStorage.getItem('ss_user')) || null;
         
-        // YOUR SCRIPT URL INTEGRATED
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTF2CIP6ZCMVs-dHok75yzs_MqmafQNyj5qydglXQVRla8SGygHWWA0AtajV9mUyTi/exec";
 
         function enterSite() {
@@ -121,28 +119,30 @@
             }
         }
 
-        function toggleAccess(type) {
-            document.getElementById('loginForm').classList.toggle('hidden', type === 'reg');
-            document.getElementById('regForm').classList.toggle('hidden', type === 'login');
-        }
-
         async function fetchData() {
             try {
                 const res = await fetch(SCRIPT_URL);
                 const data = await res.json();
-                products = data.products;
-                wholesale = data.wholesale;
-                document.getElementById('welcomeUser').innerText = `Customer: ${activeUser.name}`;
+                products = data.products || [];
+                wholesale = data.wholesale || [];
+                document.getElementById('welcomeUser').innerText = `Customer: ${activeUser.name || activeUser.email}`;
                 render();
             } catch (e) {
-                alert("Inventory offline. Please check back shortly.");
+                document.getElementById('statusText').innerText = "Inventory Offline. Please refresh page.";
             }
+        }
+
+        function goHome() {
+            document.getElementById('search').value = "";
+            render();
+            window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
         function login() {
             const email = document.getElementById('loginEmail').value.toLowerCase().trim();
             if(!email) return alert("Enter your email address");
-            activeUser = { email: email, name: email.split('@')[0], type: 'Retail' };
+            // Defaulting name for login; real name will sync if they registered
+            activeUser = { email: email, name: email.split('@')[0], taxId: "" };
             saveAndEnter();
         }
 
@@ -173,16 +173,18 @@
         function render() {
             const query = document.getElementById('search').value.toLowerCase();
             const grid = document.getElementById('grid');
-            const filtered = products.filter(p => p[0].toString().toLowerCase().includes(query));
+            if (!products.length) return;
+
+            const filtered = products.filter(p => p[0].toString().toLowerCase().includes(query) || p[1].toString().toLowerCase().includes(query));
 
             grid.innerHTML = filtered.map(p => {
                 let [name, style, retail, wholesalePrice, img] = p;
                 
-                // Set initial price
-                let userPrice = activeUser.taxId ? wholesalePrice : retail;
-                let tag = activeUser.taxId ? "WHOLESALE" : "RETAIL";
+                // Wholesale if they have a Tax ID, otherwise Retail
+                let userPrice = (activeUser.taxId && activeUser.taxId.trim() !== "") ? wholesalePrice : retail;
+                let tag = (activeUser.taxId && activeUser.taxId.trim() !== "") ? "WHOLESALE" : "RETAIL";
 
-                // Check for individual VIP price
+                // Check for individual VIP price override in WholesalePrices tab
                 let custom = wholesale.find(w => w[0].toLowerCase() === activeUser.email && w[1] === name);
                 if(custom) { userPrice = custom[2]; tag = "VIP"; }
 
@@ -206,7 +208,6 @@
             const item = cart.find(i => i.name === name);
             if(item) { item.qty++; } else { cart.push({ name, price, qty: 1 }); }
             updateCartUI();
-            alert(name + " added to order.");
         }
 
         function updateCartUI() {
@@ -259,12 +260,12 @@
                 type: "order",
                 customerName: activeUser.name,
                 email: activeUser.email,
-                customerType: activeUser.taxId ? "Wholesale" : "Retail",
+                customerType: (activeUser.taxId) ? "Wholesale" : "Retail",
                 items: cart
             };
             
             try {
-                const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(orderPayload) });
+                await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(orderPayload) });
                 alert("Order submitted successfully! Our Dallas team will contact you shortly.");
                 cart = [];
                 updateCartUI();
