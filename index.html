@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smoke Shop Accessories | Dallas Wholesale</title>
+    <title>Smoke Shop Accessories | Wholesale</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --leaf-green: #10b981; --gold: #fbbf24; }
+        :root { --leaf-green: #10b981; }
         body { 
             background: #000; 
             color: white; 
@@ -16,43 +16,50 @@
             margin: 0;
         }
 
-        /* REAL SMOKE ENGINE */
+        /* SMOKE ENGINE STYLES */
         #canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            filter: blur(50px);
-            opacity: 0.7;
+            filter: blur(60px);
+            opacity: 0.6;
         }
         .smoke-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, rgba(6, 78, 59, 0.2) 0%, #000 80%);
+            background: radial-gradient(circle at center, rgba(6, 78, 59, 0.15) 0%, #000 90%);
             z-index: -2;
         }
 
-        .glass { 
-            background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(15px); 
-            border: 1px solid rgba(16, 185, 129, 0.2); 
-            border-radius: 24px;
+        /* HEADER & LOGO STYLING */
+        header {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .logo-container img {
+            height: 80px; /* Large and readable size */
+            width: auto;
+            object-contain: contain;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
         }
 
         .product-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: rgba(255, 255, 255, 0.02);
+            transition: all 0.4s ease;
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
         }
         .product-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-8px);
             border-color: var(--leaf-green);
-            box-shadow: 0 0 40px rgba(16, 185, 129, 0.2);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.15);
         }
 
         .btn-green { 
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
             color: black;
+            font-weight: 800;
         }
-        .btn-green:hover { filter: brightness(1.2); transform: scale(1.05); }
         .hidden { display: none; }
     </style>
 </head>
@@ -62,58 +69,59 @@
     <div class="smoke-overlay"></div>
 
     <div id="ageGate" class="fixed inset-0 z-[100] bg-black flex items-center justify-center p-6">
-        <div class="glass p-12 max-w-sm w-full text-center border-t-4 border-emerald-500 shadow-[0_0_50px_rgba(16,185,129,0.2)]">
-            <img src="logo.png" class="h-20 mx-auto mb-6 object-contain">
-            <h1 class="text-xl font-black mb-2 uppercase italic tracking-tighter">Wholesale Portal</h1>
-            <p class="text-emerald-400 font-bold mb-8 uppercase text-[10px] tracking-[0.4em]">Verified Access Only</p>
-            <button onclick="enterSite()" class="w-full btn-green py-4 rounded-xl font-black text-lg transition-all">I AM 21+</button>
+        <div class="text-center">
+            <img src="logo.png" class="h-32 mx-auto mb-8 object-contain">
+            <h1 class="text-2xl font-black mb-10 tracking-widest uppercase italic">Wholesale Access Only</h1>
+            <button onclick="enterSite()" class="btn-green px-12 py-5 rounded-full text-xl shadow-2xl transition-all hover:scale-110">I AM 21 OR OLDER</button>
         </div>
     </div>
 
     <div id="app" class="hidden">
-        <header class="glass sticky top-4 z-50 mx-4 lg:mx-12 mt-4 p-4 border border-emerald-500/20">
-            <div class="container mx-auto flex justify-between items-center">
+        <header class="sticky top-0 z-50 py-4 shadow-2xl">
+            <div class="container mx-auto flex flex-col md:flex-row items-center justify-between px-6 gap-6">
                 
-                <div class="flex items-center cursor-pointer group" onclick="goHome()">
-                    <img src="logo.png" alt="Logo" class="h-14 w-auto object-contain transition-transform group-hover:scale-105">
+                <div class="logo-container cursor-pointer" onclick="goHome()">
+                    <img src="logo.png" alt="Smoke Shop Accessories">
                 </div>
 
-                <div class="flex items-center gap-6">
-                    <input type="text" id="search" onkeyup="render()" placeholder="Search Inventory..." class="hidden md:block bg-black/50 border border-emerald-500/20 px-6 py-2 rounded-full text-sm w-72 outline-none focus:border-emerald-500 text-white">
-                    <div class="relative cursor-pointer transition-transform hover:scale-110" onclick="toggleCart()">
-                        <span class="text-2xl">🛍️</span>
-                        <span id="cartCount" class="absolute -top-1 -right-2 bg-emerald-500 text-black text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full">0</span>
+                <div class="flex items-center gap-8 w-full md:w-auto">
+                    <div class="relative flex-grow md:w-80">
+                        <input type="text" id="search" onkeyup="render()" placeholder="Search Products..." class="w-full bg-white/5 border border-white/10 px-6 py-3 rounded-full text-sm outline-none focus:border-emerald-500 text-white">
                     </div>
-                    <button onclick="logout()" class="text-[10px] font-black text-red-500 uppercase tracking-widest hover:text-white">Logout</button>
+                    <div class="relative cursor-pointer hover:scale-110 transition-transform" onclick="toggleCart()">
+                        <span class="text-3xl">🛒</span>
+                        <span id="cartCount" class="absolute -top-1 -right-2 bg-emerald-500 text-black text-[10px] font-black w-6 h-6 flex items-center justify-center rounded-full">0</span>
+                    </div>
+                    <button onclick="logout()" class="text-xs font-black text-red-500 uppercase tracking-widest">Logout</button>
                 </div>
             </div>
         </header>
 
-        <main class="container mx-auto px-6 py-12">
-            <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+        <main class="container mx-auto px-6 py-16">
+            <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-10">
                 </div>
         </main>
     </div>
 
-    <div id="cartModal" class="hidden fixed inset-0 z-[110] bg-black/95 backdrop-blur-xl flex justify-end">
-        <div class="bg-black w-full max-w-md h-full p-8 flex flex-col border-l border-emerald-500/20">
-            <div class="flex justify-between items-center mb-10 border-b border-emerald-500/20 pb-6 text-white">
-                <h2 class="text-2xl font-black uppercase">Current Cart</h2>
-                <button onclick="toggleCart()" class="text-4xl text-gray-500 hover:text-white">&times;</button>
+    <div id="cartModal" class="hidden fixed inset-0 z-[110] bg-black/95 backdrop-blur-2xl flex justify-end">
+        <div class="bg-black w-full max-w-md h-full p-10 flex flex-col border-l border-white/10">
+            <div class="flex justify-between items-center mb-10 border-b border-white/10 pb-6">
+                <h2 class="text-3xl font-black uppercase italic">Your Cart</h2>
+                <button onclick="toggleCart()" class="text-5xl text-gray-500 hover:text-white">&times;</button>
             </div>
-            <div id="cartItems" class="flex-grow overflow-y-auto space-y-4"></div>
-            <div class="border-t border-emerald-500/20 pt-8 mt-8 text-white">
-                <div class="flex justify-between text-2xl font-black mb-8 italic">
-                    <span class="text-gray-400">TOTAL:</span>
-                    <span id="cartTotal" class="text-emerald-400 tracking-tighter">$0.00</span>
+            <div id="cartItems" class="flex-grow overflow-y-auto space-y-6"></div>
+            <div class="border-t border-white/10 pt-10 mt-10">
+                <div class="flex justify-between text-3xl font-black mb-10 italic">
+                    <span class="text-gray-500">TOTAL:</span>
+                    <span id="cartTotal" class="text-emerald-400">$0.00</span>
                 </div>
-                <button onclick="submitOrder()" id="orderBtn" class="w-full btn-green py-6 rounded-2xl font-black text-xl uppercase italic shadow-[0_0_40px_rgba(16,185,129,0.3)]">Complete Order</button>
+                <button onclick="submitOrder()" class="w-full btn-green py-6 rounded-3xl text-xl uppercase italic shadow-2xl">Complete Order</button>
             </div>
         </div>
     </div>
 
     <script>
-        // SMOKE ENGINE
+        // SMOKE ENGINE (Soft & Drifting)
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -125,14 +133,14 @@
             reset() {
                 this.x = Math.random() * canvas.width;
                 this.y = canvas.height + 200;
-                this.size = Math.random() * 200 + 100;
-                this.speedY = Math.random() * 0.5 + 0.3;
-                this.opacity = Math.random() * 0.15 + 0.05;
-                this.vx = Math.random() * 1 - 0.5;
+                this.size = Math.random() * 250 + 150;
+                this.speedY = Math.random() * 0.4 + 0.2;
+                this.opacity = Math.random() * 0.12 + 0.04;
+                this.vx = Math.random() * 0.8 - 0.4;
             }
             update() {
                 this.y -= this.speedY; this.x += this.vx;
-                if (this.y < -200) this.reset();
+                if (this.y < -250) this.reset();
             }
             draw() {
                 let grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
@@ -142,8 +150,7 @@
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
             }
         }
-
-        for (let i = 0; i < 40; i++) particles.push(new Particle());
+        for (let i = 0; i < 35; i++) particles.push(new Particle());
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => { p.update(); p.draw(); });
@@ -159,7 +166,7 @@
         function enterSite() {
             document.getElementById('ageGate').classList.add('hidden');
             if (activeUser) { document.getElementById('app').classList.remove('hidden'); fetchData(); } 
-            else { window.location.reload(); } // Forces login check
+            else { window.location.reload(); }
         }
 
         async function fetchData() {
@@ -168,7 +175,7 @@
                 const data = await res.json();
                 products = data.products; wholesale = data.wholesale;
                 render();
-            } catch (e) { console.log("Fetch Error"); }
+            } catch (e) { console.error("Data fetch failed"); }
         }
 
         function render() {
@@ -181,44 +188,40 @@
                 let price = (activeUser && activeUser.taxId) ? w : r;
                 let tag = (activeUser && activeUser.taxId) ? "WHOLESALE" : "RETAIL";
                 
-                // Better Auto-Image Fallback
                 let finalImg = img;
                 if (!finalImg || finalImg.trim() === "" || finalImg === "undefined") {
                     finalImg = `https://source.unsplash.com/featured/800x800/?vape,smoke,${encodeURIComponent(n)}`;
                 }
 
-                return `<div class="product-card p-5 rounded-[32px] flex flex-col h-full backdrop-blur-md">
-                    <div class="relative overflow-hidden rounded-[24px] mb-6 h-48 bg-white/5">
+                return `<div class="product-card p-6 flex flex-col h-full">
+                    <div class="relative overflow-hidden rounded-2xl mb-6 h-56 bg-white/5">
                         <img src="${finalImg}" onerror="this.src='https://images.unsplash.com/photo-1527689368864-3a821dbccc34?w=400'" class="w-full h-full object-cover">
-                        <span class="absolute top-3 left-3 bg-black/60 text-emerald-400 text-[8px] font-black px-3 py-1 rounded-full border border-emerald-500/30">${tag}</span>
+                        <span class="absolute top-4 left-4 bg-black/70 text-emerald-400 text-[9px] font-black px-4 py-1.5 rounded-full border border-emerald-500/20">${tag}</span>
                     </div>
-                    <h3 class="font-bold text-white text-md h-12 overflow-hidden mb-4 tracking-tight uppercase">${n}</h3>
-                    <div class="mt-auto flex justify-between items-center pt-5 border-t border-white/5">
-                        <p class="text-xl font-black text-emerald-400 italic">$${Number(price).toFixed(2)}</p>
-                        <button onclick="addToCart('${n}', ${price})" class="btn-green w-10 h-10 flex items-center justify-center rounded-xl font-black shadow-lg">+</button>
+                    <h3 class="font-bold text-white text-md h-12 overflow-hidden mb-6 uppercase tracking-tight">${n}</h3>
+                    <div class="mt-auto flex justify-between items-center pt-6 border-t border-white/5">
+                        <p class="text-2xl font-black text-emerald-400">$${Number(price).toFixed(2)}</p>
+                        <button onclick="addToCart('${n}', ${price})" class="btn-green w-12 h-12 flex items-center justify-center rounded-2xl shadow-xl active:scale-90">+</button>
                     </div>
                 </div>`;
             }).join('');
         }
 
-        // Standard helpers
         function logout() { localStorage.removeItem('ss_user'); location.reload(); }
         function goHome() { document.getElementById('search').value = ""; render(); }
         function addToCart(n, p) { const i = cart.find(x => x.name === n); if(i) i.qty++; else cart.push({ name: n, price: p, qty: 1 }); updateCartUI(); }
         function updateCartUI() {
             document.getElementById('cartCount').innerText = cart.reduce((a, b) => a + b.qty, 0);
             const c = document.getElementById('cartItems'); let t = 0;
-            c.innerHTML = cart.map((x, idx) => { t += x.price * x.qty; return `<div class="glass p-4 flex justify-between items-center text-white"><div><p class="font-bold text-xs uppercase">${x.name}</p><p class="text-sm font-black text-emerald-400">$${x.price}</p></div><button onclick="removeItem(${idx})" class="text-red-500">×</button></div>` }).join('');
+            c.innerHTML = cart.map((x, idx) => { t += x.price * x.qty; return `<div class="bg-white/5 p-5 rounded-2xl flex justify-between items-center border border-white/5"><div><p class="font-bold text-xs uppercase">${x.name}</p><p class="text-md font-black text-emerald-400 mt-1">$${x.price}</p></div><button onclick="removeItem(${idx})" class="text-red-500 text-2xl font-light">×</button></div>` }).join('');
             document.getElementById('cartTotal').innerText = `$${t.toFixed(2)}`;
         }
         function removeItem(idx) { cart.splice(idx, 1); updateCartUI(); }
         function toggleCart() { document.getElementById('cartModal').classList.toggle('hidden'); }
-        async function submitOrder() {
-            alert("ORDER SENT TO DALLAS HQ."); cart = []; updateCartUI(); toggleCart();
-        }
+        async function submitOrder() { alert("ORDER SENT TO DALLAS HQ."); cart = []; updateCartUI(); toggleCart(); }
         
-        // Auto-load if user exists
-        if(activeUser) { document.getElementById('app').classList.remove('hidden'); fetchData(); } else { document.getElementById('ageGate').classList.remove('hidden'); }
+        if(activeUser) { document.getElementById('app').classList.remove('hidden'); fetchData(); } 
+        else { document.getElementById('ageGate').classList.remove('hidden'); }
     </script>
 </body>
 </html>
