@@ -3,163 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smoke Shop Accessories | Wholesale</title>
+    <title>Smoke Shop Accessories | Premium Wholesale</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --leaf-green: #10b981; }
+        :root { --leaf-green: #10b981; --dark-text: #0f172a; }
         body { 
             background: #000; 
             color: white; 
             font-family: 'Plus Jakarta Sans', sans-serif;
-            overflow-x: hidden;
             margin: 0;
+            overflow-x: hidden;
         }
 
-        /* SMOKE ENGINE STYLES */
-        #canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            filter: blur(60px);
-            opacity: 0.6;
-        }
-        .smoke-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at center, rgba(6, 78, 59, 0.15) 0%, #000 90%);
+        /* NEON VIDEO BACKGROUND */
+        #video-bg {
+            position: fixed; top: 50%; left: 50%;
+            min-width: 100%; min-height: 100%;
+            width: auto; height: auto;
             z-index: -2;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            filter: brightness(0.5);
         }
 
-        /* HEADER & LOGO STYLING */
+        /* TOP HEADER ROW - CLEAN WHITE */
         header {
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+            background: #ffffff;
+            border-bottom: 2px solid var(--leaf-green);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
+        /* FONT & COLOR AUTO-MATCH */
+        .header-text { color: var(--dark-text); font-weight: 700; }
+        
         .logo-container img {
-            height: 80px; /* Large and readable size */
+            height: 75px;
             width: auto;
-            object-contain: contain;
-            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        .logo-container:hover img { transform: scale(1.03); }
+
+        /* SEARCH BAR ADJUSTMENT FOR WHITE HEADER */
+        #search {
+            background: #f1f5f9;
+            color: var(--dark-text);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        #search:focus {
+            border-color: var(--leaf-green);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
         }
 
-        .product-card {
-            transition: all 0.4s ease;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+        /* PRODUCT CARDS */
+        .glass-card {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px;
+            transition: all 0.3s ease;
         }
-        .product-card:hover {
-            transform: translateY(-8px);
+        .glass-card:hover {
             border-color: var(--leaf-green);
-            box-shadow: 0 0 30px rgba(16, 185, 129, 0.15);
+            transform: translateY(-8px);
         }
 
         .btn-green { 
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: black;
+            background: #10b981;
+            color: white;
             font-weight: 800;
+            transition: all 0.3s ease;
         }
+        .btn-green:hover { background: #059669; transform: scale(1.05); }
+
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
-    <canvas id="canvas"></canvas>
-    <div class="smoke-overlay"></div>
+    <video autoplay muted loop playsinline id="video-bg">
+        <source src="https://static.vecteezy.com/system/resources/previews/021/224/146/mp4/flickering-green-neon-light-cannabis-leaf-background-animation-full-hd-and-looping-motion-background-video.mp4" type="video/mp4">
+    </video>
 
     <div id="ageGate" class="fixed inset-0 z-[100] bg-black flex items-center justify-center p-6">
         <div class="text-center">
-            <img src="logo.png" class="h-32 mx-auto mb-8 object-contain">
-            <h1 class="text-2xl font-black mb-10 tracking-widest uppercase italic">Wholesale Access Only</h1>
-            <button onclick="enterSite()" class="btn-green px-12 py-5 rounded-full text-xl shadow-2xl transition-all hover:scale-110">I AM 21 OR OLDER</button>
+            <img src="logo.png" class="h-40 mx-auto mb-8 object-contain">
+            <button onclick="enterSite()" class="btn-green px-16 py-5 rounded-full text-xl uppercase tracking-tighter">Enter Wholesale 21+</button>
         </div>
     </div>
 
     <div id="app" class="hidden">
-        <header class="sticky top-0 z-50 py-4 shadow-2xl">
-            <div class="container mx-auto flex flex-col md:flex-row items-center justify-between px-6 gap-6">
+        <header class="sticky top-0 z-50 py-3">
+            <div class="container mx-auto flex flex-col md:flex-row items-center justify-between px-6 gap-4">
                 
                 <div class="logo-container cursor-pointer" onclick="goHome()">
-                    <img src="logo.png" alt="Smoke Shop Accessories">
+                    <img src="logo.png" alt="Logo">
                 </div>
 
-                <div class="flex items-center gap-8 w-full md:w-auto">
-                    <div class="relative flex-grow md:w-80">
-                        <input type="text" id="search" onkeyup="render()" placeholder="Search Products..." class="w-full bg-white/5 border border-white/10 px-6 py-3 rounded-full text-sm outline-none focus:border-emerald-500 text-white">
+                <div class="flex items-center gap-6 w-full md:w-auto">
+                    <div class="relative flex-grow">
+                        <input type="text" id="search" onkeyup="render()" placeholder="Search Inventory..." class="w-full md:w-80 px-6 py-3 rounded-xl outline-none font-semibold">
                     </div>
-                    <div class="relative cursor-pointer hover:scale-110 transition-transform" onclick="toggleCart()">
+                    
+                    <div class="relative cursor-pointer group" onclick="toggleCart()">
                         <span class="text-3xl">🛒</span>
-                        <span id="cartCount" class="absolute -top-1 -right-2 bg-emerald-500 text-black text-[10px] font-black w-6 h-6 flex items-center justify-center rounded-full">0</span>
+                        <span id="cartCount" class="absolute -top-1 -right-2 bg-emerald-500 text-white text-[10px] font-black w-6 h-6 flex items-center justify-center rounded-full">0</span>
                     </div>
-                    <button onclick="logout()" class="text-xs font-black text-red-500 uppercase tracking-widest">Logout</button>
+
+                    <button onclick="logout()" class="text-xs font-black text-red-600 hover:text-red-800 uppercase tracking-widest">Logout</button>
                 </div>
             </div>
         </header>
 
         <main class="container mx-auto px-6 py-16">
-            <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-10">
+            <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
                 </div>
         </main>
     </div>
 
     <div id="cartModal" class="hidden fixed inset-0 z-[110] bg-black/95 backdrop-blur-2xl flex justify-end">
-        <div class="bg-black w-full max-w-md h-full p-10 flex flex-col border-l border-white/10">
-            <div class="flex justify-between items-center mb-10 border-b border-white/10 pb-6">
-                <h2 class="text-3xl font-black uppercase italic">Your Cart</h2>
-                <button onclick="toggleCart()" class="text-5xl text-gray-500 hover:text-white">&times;</button>
+        <div class="bg-white w-full max-w-md h-full p-10 flex flex-col shadow-2xl">
+            <div class="flex justify-between items-center mb-10 border-b pb-6">
+                <h2 class="text-3xl font-black text-gray-900 uppercase">Your Order</h2>
+                <button onclick="toggleCart()" class="text-5xl text-gray-400 hover:text-black">&times;</button>
             </div>
-            <div id="cartItems" class="flex-grow overflow-y-auto space-y-6"></div>
-            <div class="border-t border-white/10 pt-10 mt-10">
-                <div class="flex justify-between text-3xl font-black mb-10 italic">
-                    <span class="text-gray-500">TOTAL:</span>
-                    <span id="cartTotal" class="text-emerald-400">$0.00</span>
+            <div id="cartItems" class="flex-grow overflow-y-auto space-y-4"></div>
+            <div class="border-t pt-10 mt-10">
+                <div class="flex justify-between text-3xl font-black mb-10 text-gray-900">
+                    <span>TOTAL:</span>
+                    <span class="text-emerald-600" id="cartTotal">$0.00</span>
                 </div>
-                <button onclick="submitOrder()" class="w-full btn-green py-6 rounded-3xl text-xl uppercase italic shadow-2xl">Complete Order</button>
+                <button onclick="submitOrder()" class="w-full btn-green py-6 rounded-2xl text-xl uppercase italic">Send to Wholesale</button>
             </div>
         </div>
     </div>
 
     <script>
-        // SMOKE ENGINE (Soft & Drifting)
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resize); resize();
-
-        class Particle {
-            constructor() { this.reset(); this.y = Math.random() * canvas.height; }
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = canvas.height + 200;
-                this.size = Math.random() * 250 + 150;
-                this.speedY = Math.random() * 0.4 + 0.2;
-                this.opacity = Math.random() * 0.12 + 0.04;
-                this.vx = Math.random() * 0.8 - 0.4;
-            }
-            update() {
-                this.y -= this.speedY; this.x += this.vx;
-                if (this.y < -250) this.reset();
-            }
-            draw() {
-                let grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
-                grad.addColorStop(0, `rgba(16, 185, 129, ${this.opacity})`);
-                grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-                ctx.fillStyle = grad; ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
-            }
-        }
-        for (let i = 0; i < 35; i++) particles.push(new Particle());
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animate);
-        }
-        animate();
-
-        // APP LOGIC
-        let products = []; let wholesale = []; let cart = [];
+        let products = []; let cart = [];
         let activeUser = JSON.parse(localStorage.getItem('ss_user')) || null;
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw_ntPTHQXVkrYjiFP9-PuqnfD1teJgTnQyT4j4uT0y79mwOE3fW6i_o2KxVjvhkWbj/exec";
 
@@ -170,12 +153,10 @@
         }
 
         async function fetchData() {
-            try {
-                const res = await fetch(SCRIPT_URL);
-                const data = await res.json();
-                products = data.products; wholesale = data.wholesale;
-                render();
-            } catch (e) { console.error("Data fetch failed"); }
+            const res = await fetch(SCRIPT_URL);
+            const data = await res.json();
+            products = data.products;
+            render();
         }
 
         function render() {
@@ -186,22 +167,16 @@
             g.innerHTML = filtered.map(p => {
                 let [n, s, r, w, img] = p;
                 let price = (activeUser && activeUser.taxId) ? w : r;
-                let tag = (activeUser && activeUser.taxId) ? "WHOLESALE" : "RETAIL";
-                
-                let finalImg = img;
-                if (!finalImg || finalImg.trim() === "" || finalImg === "undefined") {
-                    finalImg = `https://source.unsplash.com/featured/800x800/?vape,smoke,${encodeURIComponent(n)}`;
-                }
+                let finalImg = img || `https://source.unsplash.com/featured/400x400/?smoke,vape,${encodeURIComponent(n)}`;
 
-                return `<div class="product-card p-6 flex flex-col h-full">
-                    <div class="relative overflow-hidden rounded-2xl mb-6 h-56 bg-white/5">
-                        <img src="${finalImg}" onerror="this.src='https://images.unsplash.com/photo-1527689368864-3a821dbccc34?w=400'" class="w-full h-full object-cover">
-                        <span class="absolute top-4 left-4 bg-black/70 text-emerald-400 text-[9px] font-black px-4 py-1.5 rounded-full border border-emerald-500/20">${tag}</span>
+                return `<div class="glass-card p-6 flex flex-col h-full">
+                    <div class="rounded-2xl overflow-hidden mb-6 h-52 bg-white/5">
+                        <img src="${finalImg}" class="w-full h-full object-cover">
                     </div>
-                    <h3 class="font-bold text-white text-md h-12 overflow-hidden mb-6 uppercase tracking-tight">${n}</h3>
-                    <div class="mt-auto flex justify-between items-center pt-6 border-t border-white/5">
+                    <h3 class="font-bold text-md text-white h-12 overflow-hidden uppercase tracking-tight mb-4">${n}</h3>
+                    <div class="mt-auto flex justify-between items-center pt-4 border-t border-white/10">
                         <p class="text-2xl font-black text-emerald-400">$${Number(price).toFixed(2)}</p>
-                        <button onclick="addToCart('${n}', ${price})" class="btn-green w-12 h-12 flex items-center justify-center rounded-2xl shadow-xl active:scale-90">+</button>
+                        <button onclick="addToCart('${n}', ${price})" class="btn-green w-12 h-12 rounded-xl text-2xl shadow-lg active:scale-95">+</button>
                     </div>
                 </div>`;
             }).join('');
@@ -209,16 +184,29 @@
 
         function logout() { localStorage.removeItem('ss_user'); location.reload(); }
         function goHome() { document.getElementById('search').value = ""; render(); }
-        function addToCart(n, p) { const i = cart.find(x => x.name === n); if(i) i.qty++; else cart.push({ name: n, price: p, qty: 1 }); updateCartUI(); }
+        function addToCart(n, p) { 
+            const i = cart.find(x => x.name === n); 
+            if(i) i.qty++; else cart.push({ name: n, price: p, qty: 1 }); 
+            updateCartUI(); 
+        }
         function updateCartUI() {
             document.getElementById('cartCount').innerText = cart.reduce((a, b) => a + b.qty, 0);
             const c = document.getElementById('cartItems'); let t = 0;
-            c.innerHTML = cart.map((x, idx) => { t += x.price * x.qty; return `<div class="bg-white/5 p-5 rounded-2xl flex justify-between items-center border border-white/5"><div><p class="font-bold text-xs uppercase">${x.name}</p><p class="text-md font-black text-emerald-400 mt-1">$${x.price}</p></div><button onclick="removeItem(${idx})" class="text-red-500 text-2xl font-light">×</button></div>` }).join('');
+            c.innerHTML = cart.map((x, idx) => { 
+                t += x.price * x.qty; 
+                return `<div class="bg-gray-50 p-4 rounded-xl flex justify-between items-center border">
+                    <div>
+                        <p class="text-xs font-black text-gray-900 uppercase">${x.name}</p>
+                        <p class="text-sm font-bold text-emerald-600">$${x.price} x ${x.qty}</p>
+                    </div>
+                    <button onclick="removeItem(${idx})" class="text-red-500 font-bold text-xl">&times;</button>
+                </div>` 
+            }).join('');
             document.getElementById('cartTotal').innerText = `$${t.toFixed(2)}`;
         }
         function removeItem(idx) { cart.splice(idx, 1); updateCartUI(); }
         function toggleCart() { document.getElementById('cartModal').classList.toggle('hidden'); }
-        async function submitOrder() { alert("ORDER SENT TO DALLAS HQ."); cart = []; updateCartUI(); toggleCart(); }
+        async function submitOrder() { alert("Wholesale Order Logged!"); cart = []; updateCartUI(); toggleCart(); }
         
         if(activeUser) { document.getElementById('app').classList.remove('hidden'); fetchData(); } 
         else { document.getElementById('ageGate').classList.remove('hidden'); }
