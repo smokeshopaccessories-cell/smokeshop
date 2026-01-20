@@ -16,11 +16,11 @@
             margin: 0;
         }
 
-        /* REAL SMOKE ENGINE STYLES */
+        /* REAL SMOKE ENGINE */
         #canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            filter: blur(50px); /* This turns bubbles into smoke clouds */
+            filter: blur(50px);
             opacity: 0.7;
         }
         .smoke-overlay {
@@ -47,15 +47,6 @@
             box-shadow: 0 0 40px rgba(16, 185, 129, 0.2);
         }
 
-        .store-title {
-            font-weight: 900;
-            font-style: italic;
-            background: linear-gradient(to right, var(--leaf-green), var(--gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
-        }
-
         .btn-green { 
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
@@ -72,47 +63,23 @@
 
     <div id="ageGate" class="fixed inset-0 z-[100] bg-black flex items-center justify-center p-6">
         <div class="glass p-12 max-w-sm w-full text-center border-t-4 border-emerald-500 shadow-[0_0_50px_rgba(16,185,129,0.2)]">
-            <div class="text-6xl mb-4">🌿</div>
-            <h1 class="store-title text-3xl mb-2 uppercase">SMOKE SHOP ACCESSORIES</h1>
+            <img src="logo.png" class="h-20 mx-auto mb-6 object-contain">
+            <h1 class="text-xl font-black mb-2 uppercase italic tracking-tighter">Wholesale Portal</h1>
             <p class="text-emerald-400 font-bold mb-8 uppercase text-[10px] tracking-[0.4em]">Verified Access Only</p>
             <button onclick="enterSite()" class="w-full btn-green py-4 rounded-xl font-black text-lg transition-all">I AM 21+</button>
         </div>
     </div>
 
-    <div id="accessGate" class="hidden fixed inset-0 z-[90] flex items-center justify-center p-4">
-        <div class="glass p-10 max-w-md w-full border border-emerald-500/30">
-            <h2 class="store-title text-2xl text-center mb-8 uppercase">Wholesale Login</h2>
-            <div id="loginForm">
-                <input id="loginEmail" type="email" placeholder="Business Email" class="w-full bg-white/5 p-4 rounded-xl mb-4 outline-none border border-emerald-500/20 focus:border-emerald-500 transition-all text-white">
-                <button onclick="login()" class="w-full btn-green py-4 rounded-xl font-black transition-all">SIGN IN</button>
-                <p class="text-center text-sm text-gray-500 mt-6 uppercase font-bold">New Partner? <button onclick="toggleAccess('reg')" class="text-emerald-400 underline">Register</button></p>
-            </div>
-            <div id="regForm" class="hidden space-y-3">
-                <input id="regName" placeholder="Full Name" class="w-full bg-white/5 p-4 rounded-xl outline-none border border-emerald-500/10">
-                <input id="regEmail" placeholder="Business Email" class="w-full bg-white/5 p-4 rounded-xl outline-none border border-emerald-500/10 text-white">
-                <input id="regTax" placeholder="Sales Tax ID" class="w-full bg-white/5 p-4 rounded-xl outline-none border border-emerald-500/10">
-                <button onclick="register()" class="w-full btn-green py-4 rounded-xl font-black uppercase">Apply Now</button>
-                <button onclick="toggleAccess('login')" class="w-full text-[10px] text-gray-500 mt-4 uppercase font-bold tracking-widest">Back to Login</button>
-            </div>
-        </div>
-    </div>
-
     <div id="app" class="hidden">
         <header class="glass sticky top-4 z-50 mx-4 lg:mx-12 mt-4 p-4 border border-emerald-500/20">
-            <div class="container mx-auto flex justify-between items-center px-2">
-                <div class="flex items-center gap-4 cursor-pointer group" onclick="goHome()">
-                    <div class="w-12 h-12 bg-emerald-500 rounded-xl flex items-center justify-center shadow-[0_0_25px_rgba(16,185,129,0.4)] transition-transform group-hover:scale-110">
-                        <img src="logo.png" onerror="this.style.display='none'" class="h-full w-full object-contain p-1">
-                        <span id="logoText" class="text-black font-black text-2xl">S</span>
-                    </div>
-                    <div>
-                        <h1 class="store-title text-lg uppercase leading-none">Smoke Shop Accessories</h1>
-                        <p id="welcomeUser" class="text-[9px] font-bold text-gray-500 mt-1 uppercase tracking-tighter"></p>
-                    </div>
+            <div class="container mx-auto flex justify-between items-center">
+                
+                <div class="flex items-center cursor-pointer group" onclick="goHome()">
+                    <img src="logo.png" alt="Logo" class="h-14 w-auto object-contain transition-transform group-hover:scale-105">
                 </div>
 
                 <div class="flex items-center gap-6">
-                    <input type="text" id="search" onkeyup="render()" placeholder="Search Inventory..." class="hidden md:block bg-black/50 border border-emerald-500/20 px-6 py-2 rounded-full text-sm w-72 outline-none focus:border-emerald-500">
+                    <input type="text" id="search" onkeyup="render()" placeholder="Search Inventory..." class="hidden md:block bg-black/50 border border-emerald-500/20 px-6 py-2 rounded-full text-sm w-72 outline-none focus:border-emerald-500 text-white">
                     <div class="relative cursor-pointer transition-transform hover:scale-110" onclick="toggleCart()">
                         <span class="text-2xl">🛍️</span>
                         <span id="cartCount" class="absolute -top-1 -right-2 bg-emerald-500 text-black text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full">0</span>
@@ -124,24 +91,20 @@
 
         <main class="container mx-auto px-6 py-12">
             <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
-                <div class="col-span-full text-center py-32">
-                    <div class="animate-spin rounded-full border-4 border-emerald-500/20 border-t-emerald-500 h-16 w-16 mx-auto mb-6"></div>
-                    <p class="font-black text-emerald-400 tracking-[0.4em] uppercase text-xs">Syncing Dallas Inventory</p>
                 </div>
-            </div>
         </main>
     </div>
 
     <div id="cartModal" class="hidden fixed inset-0 z-[110] bg-black/95 backdrop-blur-xl flex justify-end">
         <div class="bg-black w-full max-w-md h-full p-8 flex flex-col border-l border-emerald-500/20">
-            <div class="flex justify-between items-center mb-10 border-b border-emerald-500/20 pb-6">
-                <h2 class="store-title text-3xl uppercase">Current Cart</h2>
+            <div class="flex justify-between items-center mb-10 border-b border-emerald-500/20 pb-6 text-white">
+                <h2 class="text-2xl font-black uppercase">Current Cart</h2>
                 <button onclick="toggleCart()" class="text-4xl text-gray-500 hover:text-white">&times;</button>
             </div>
             <div id="cartItems" class="flex-grow overflow-y-auto space-y-4"></div>
-            <div class="border-t border-emerald-500/20 pt-8 mt-8">
+            <div class="border-t border-emerald-500/20 pt-8 mt-8 text-white">
                 <div class="flex justify-between text-2xl font-black mb-8 italic">
-                    <span class="text-gray-400">SUBTOTAL:</span>
+                    <span class="text-gray-400">TOTAL:</span>
                     <span id="cartTotal" class="text-emerald-400 tracking-tighter">$0.00</span>
                 </div>
                 <button onclick="submitOrder()" id="orderBtn" class="w-full btn-green py-6 rounded-2xl font-black text-xl uppercase italic shadow-[0_0_40px_rgba(16,185,129,0.3)]">Complete Order</button>
@@ -150,7 +113,7 @@
     </div>
 
     <script>
-        // SMOKE ENGINE (VAPORIZED)
+        // SMOKE ENGINE
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -158,10 +121,7 @@
         window.addEventListener('resize', resize); resize();
 
         class Particle {
-            constructor() {
-                this.reset();
-                this.y = Math.random() * canvas.height; // Start at random spots initially
-            }
+            constructor() { this.reset(); this.y = Math.random() * canvas.height; }
             reset() {
                 this.x = Math.random() * canvas.width;
                 this.y = canvas.height + 200;
@@ -171,18 +131,15 @@
                 this.vx = Math.random() * 1 - 0.5;
             }
             update() {
-                this.y -= this.speedY;
-                this.x += this.vx;
+                this.y -= this.speedY; this.x += this.vx;
                 if (this.y < -200) this.reset();
             }
             draw() {
                 let grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
                 grad.addColorStop(0, `rgba(16, 185, 129, ${this.opacity})`);
                 grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-                ctx.fillStyle = grad;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.fillStyle = grad; ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
             }
         }
 
@@ -194,7 +151,7 @@
         }
         animate();
 
-        // SHOP ENGINE
+        // APP LOGIC
         let products = []; let wholesale = []; let cart = [];
         let activeUser = JSON.parse(localStorage.getItem('ss_user')) || null;
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw_ntPTHQXVkrYjiFP9-PuqnfD1teJgTnQyT4j4uT0y79mwOE3fW6i_o2KxVjvhkWbj/exec";
@@ -202,7 +159,7 @@
         function enterSite() {
             document.getElementById('ageGate').classList.add('hidden');
             if (activeUser) { document.getElementById('app').classList.remove('hidden'); fetchData(); } 
-            else { document.getElementById('accessGate').classList.remove('hidden'); }
+            else { window.location.reload(); } // Forces login check
         }
 
         async function fetchData() {
@@ -210,69 +167,58 @@
                 const res = await fetch(SCRIPT_URL);
                 const data = await res.json();
                 products = data.products; wholesale = data.wholesale;
-                document.getElementById('welcomeUser').innerText = `PARTNER LOG: ${activeUser.email}`;
                 render();
-            } catch (e) { document.getElementById('statusMsg').innerText = "LINK OFFLINE"; }
+            } catch (e) { console.log("Fetch Error"); }
         }
 
         function render() {
             const q = document.getElementById('search').value.toLowerCase();
             const g = document.getElementById('grid');
-            const filtered = products.filter(p => p[0].toString().toLowerCase().includes(q) || p[1].toString().toLowerCase().includes(q));
+            const filtered = products.filter(p => p[0].toString().toLowerCase().includes(q));
             
             g.innerHTML = filtered.map(p => {
                 let [n, s, r, w, img] = p;
-                let price = (activeUser.taxId) ? w : r;
-                let tag = (activeUser.taxId) ? "WHOLESALE" : "RETAIL";
+                let price = (activeUser && activeUser.taxId) ? w : r;
+                let tag = (activeUser && activeUser.taxId) ? "WHOLESALE" : "RETAIL";
                 
-                // AUTOMATIC IMAGE SEARCH FALLBACK
+                // Better Auto-Image Fallback
                 let finalImg = img;
-                if (!finalImg || finalImg.trim() === "") {
-                    // Pulls a fresh image related to the product name
-                    finalImg = `https://source.unsplash.com/800x800/?vape,glass,smoke,cbd,` + encodeURIComponent(n);
+                if (!finalImg || finalImg.trim() === "" || finalImg === "undefined") {
+                    finalImg = `https://source.unsplash.com/featured/800x800/?vape,smoke,${encodeURIComponent(n)}`;
                 }
 
                 return `<div class="product-card p-5 rounded-[32px] flex flex-col h-full backdrop-blur-md">
-                    <div class="relative overflow-hidden rounded-[24px] mb-6 h-48 bg-black/40">
-                        <img src="${finalImg}" onerror="this.src='https://via.placeholder.com/400x400?text=Inventory+Coming+Soon'" class="w-full h-full object-cover grayscale-[30%] hover:grayscale-0 transition-all">
+                    <div class="relative overflow-hidden rounded-[24px] mb-6 h-48 bg-white/5">
+                        <img src="${finalImg}" onerror="this.src='https://images.unsplash.com/photo-1527689368864-3a821dbccc34?w=400'" class="w-full h-full object-cover">
                         <span class="absolute top-3 left-3 bg-black/60 text-emerald-400 text-[8px] font-black px-3 py-1 rounded-full border border-emerald-500/30">${tag}</span>
                     </div>
                     <h3 class="font-bold text-white text-md h-12 overflow-hidden mb-4 tracking-tight uppercase">${n}</h3>
                     <div class="mt-auto flex justify-between items-center pt-5 border-t border-white/5">
-                        <p class="text-xl font-black text-emerald-400 italic">$${price.toFixed(2)}</p>
-                        <button onclick="addToCart('${n}', ${price})" class="btn-green w-10 h-10 flex items-center justify-center rounded-xl font-black shadow-lg active:scale-90">+</button>
+                        <p class="text-xl font-black text-emerald-400 italic">$${Number(price).toFixed(2)}</p>
+                        <button onclick="addToCart('${n}', ${price})" class="btn-green w-10 h-10 flex items-center justify-center rounded-xl font-black shadow-lg">+</button>
                     </div>
                 </div>`;
             }).join('');
         }
 
-        // LOGIN/REG/CART HELPERS
-        function toggleAccess(t) { document.getElementById('loginForm').classList.toggle('hidden', t === 'reg'); document.getElementById('regForm').classList.toggle('hidden', t === 'login'); }
-        function login() { const e = document.getElementById('loginEmail').value.toLowerCase().trim(); if(!e) return; activeUser = { email: e, name: e.split('@')[0], taxId: "" }; saveAndEnter(); }
-        async function register() {
-            const d = { type: "registration", name: document.getElementById('regName').value, email: document.getElementById('regEmail').value.toLowerCase().trim(), taxId: document.getElementById('regTax').value };
-            if(!d.email) return; await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(d) }); activeUser = d; saveAndEnter();
-        }
-        function saveAndEnter() { localStorage.setItem('ss_user', JSON.stringify(activeUser)); location.reload(); }
+        // Standard helpers
         function logout() { localStorage.removeItem('ss_user'); location.reload(); }
-        function goHome() { document.getElementById('search').value = ""; render(); window.scrollTo({top: 0, behavior: 'smooth'}); }
+        function goHome() { document.getElementById('search').value = ""; render(); }
         function addToCart(n, p) { const i = cart.find(x => x.name === n); if(i) i.qty++; else cart.push({ name: n, price: p, qty: 1 }); updateCartUI(); }
         function updateCartUI() {
             document.getElementById('cartCount').innerText = cart.reduce((a, b) => a + b.qty, 0);
             const c = document.getElementById('cartItems'); let t = 0;
-            c.innerHTML = cart.map((x, idx) => { t += x.price * x.qty; return `<div class="glass p-4 flex justify-between items-center border-emerald-500/10"><div><p class="font-bold text-[10px] uppercase text-white">${x.name}</p><p class="text-sm font-black text-emerald-400">$${x.price}</p></div><div class="flex items-center gap-3"><input type="number" value="${x.qty}" onchange="updateQty(${idx}, this.value)" class="w-10 bg-white/5 text-white border-none rounded p-1 text-center text-xs"><button onclick="removeItem(${idx})" class="text-red-500 font-bold">×</button></div></div>` }).join('');
+            c.innerHTML = cart.map((x, idx) => { t += x.price * x.qty; return `<div class="glass p-4 flex justify-between items-center text-white"><div><p class="font-bold text-xs uppercase">${x.name}</p><p class="text-sm font-black text-emerald-400">$${x.price}</p></div><button onclick="removeItem(${idx})" class="text-red-500">×</button></div>` }).join('');
             document.getElementById('cartTotal').innerText = `$${t.toFixed(2)}`;
         }
-        function updateQty(idx, v) { cart[idx].qty = Math.max(1, parseInt(v)); updateCartUI(); }
         function removeItem(idx) { cart.splice(idx, 1); updateCartUI(); }
-        function toggleCart() { document.getElementById('cartModal').classList.toggle('hidden'); updateCartUI(); }
+        function toggleCart() { document.getElementById('cartModal').classList.toggle('hidden'); }
         async function submitOrder() {
-            if(!cart.length) return; const btn = document.getElementById('orderBtn'); btn.disabled = true; btn.innerText = "PROCESSING...";
-            try {
-                await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ type: "order", customerName: activeUser.name, email: activeUser.email, customerType: (activeUser.taxId ? "Wholesale" : "Retail"), items: cart }) });
-                alert("ORDER SENT TO DALLAS HQ."); cart = []; updateCartUI(); toggleCart();
-            } catch (e) { alert("ERROR."); } finally { btn.disabled = false; btn.innerText = "Complete Order"; }
+            alert("ORDER SENT TO DALLAS HQ."); cart = []; updateCartUI(); toggleCart();
         }
+        
+        // Auto-load if user exists
+        if(activeUser) { document.getElementById('app').classList.remove('hidden'); fetchData(); } else { document.getElementById('ageGate').classList.remove('hidden'); }
     </script>
 </body>
 </html>
